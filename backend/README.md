@@ -1,6 +1,6 @@
 # FinSight Backend
 
-Minimal FastAPI service for the FinSight monorepo.
+FastAPI service for the FinSight monorepo. Full product context: **[root README](../README.md)**.
 
 ## Setup
 
@@ -8,9 +8,11 @@ Minimal FastAPI service for the FinSight monorepo.
 cd backend
 python3 -m venv .venv
 source .venv/bin/activate
-pip install -e .
+pip install -e ".[dev]"
+# Optional offline ML:
+# pip install -e ".[ml,dev]"
 cp .env.example .env
-# Edit DATABASE_URL if your Postgres user/db differ
+# Set DATABASE_URL to your local Postgres user/database
 ```
 
 ## Database
@@ -23,8 +25,14 @@ alembic upgrade head
 ## Run
 
 ```bash
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
 ```
 
-- Health: http://localhost:8000/health
-- Docs: http://localhost:8000/docs
+- Health: http://127.0.0.1:8000/health
+- Docs: http://127.0.0.1:8000/docs
+
+## Tests
+
+```bash
+pytest
+```
