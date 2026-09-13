@@ -1,0 +1,251 @@
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.nav {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.875rem;
+}
+
+.nav a {
+  color: #374151;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  align-items: end;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-width: 10rem;
+}
+
+.field label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.field select {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  color: inherit;
+}
+
+.apply {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.55rem 0.9rem;
+  border: 1px solid #111827;
+  background: #111827;
+  color: #f9fafb;
+  cursor: pointer;
+}
+
+.error {
+  padding: 1rem 1.1rem;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.75rem;
+}
+
+.card {
+  border: 1px solid #e5e7eb;
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cardLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.cardValue {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+}
+
+.positive {
+  color: #047857;
+}
+
+.negative {
+  color: #b91c1c;
+}
+
+.panel {
+  border: 1px solid #e5e7eb;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.panelTitle {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.momLine {
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 0.75rem;
+}
+
+.barList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0;
+}
+
+.barItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.barMeta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+}
+
+.barTrack {
+  height: 0.45rem;
+  background: #e5e7eb;
+}
+
+.barFill {
+  height: 100%;
+  background: #374151;
+}
+
+.empty {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.muted {
+  color: #6b7280;
+  font-weight: 400;
+}
+
+@media (prefers-color-scheme: dark) {
+  .brand,
+  .subtitle,
+  .field label,
+  .cardLabel,
+  .empty,
+  .muted {
+    color: #9ca3af;
+  }
+
+  .nav a {
+    color: #d1d5db;
+  }
+
+  .field select,
+  .card,
+  .panel,
+  .barTrack {
+    border-color: #374151;
+  }
+
+  .barTrack {
+    background: #374151;
+  }
+
+  .barFill {
+    background: #d1d5db;
+  }
+
+  .apply {
+    border-color: #e5e7eb;
+    background: #e5e7eb;
+    color: #111827;
+  }
+
+  .error {
+    border-color: #7f1d1d;
+    background: #450a0a;
+    color: #fecaca;
+  }
+
+  .positive {
+    color: #34d399;
+  }
+
+  .negative {
+    color: #fca5a5;
+  }
+}

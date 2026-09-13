@@ -1,0 +1,120 @@
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 52rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.nav {
+  font-size: 0.875rem;
+}
+
+.nav a {
+  color: #374151;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.status {
+  padding: 1rem 0;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.error {
+  padding: 1rem 1.1rem;
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.75rem 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+  vertical-align: top;
+}
+
+.table th {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.balance {
+  font-variant-numeric: tabular-nums;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  white-space: nowrap;
+}
+
+.type {
+  text-transform: capitalize;
+}
+
+@media (prefers-color-scheme: dark) {
+  .brand,
+  .subtitle,
+  .status,
+  .table th {
+    color: #9ca3af;
+  }
+
+  .nav a {
+    color: #d1d5db;
+  }
+
+  .table th,
+  .table td {
+    border-bottom-color: #374151;
+  }
+
+  .error {
+    border-color: #7f1d1d;
+    background: #450a0a;
+    color: #fecaca;
+  }
+}

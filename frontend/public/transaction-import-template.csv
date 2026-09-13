@@ -1,0 +1,4 @@
+date,merchant,amount,description,category
+2026-09-05,Coffee Shop,-4.75,Latte,food
+2026-09-06,Payroll,2500.00,Biweekly pay,income
+2026-09-07,Transit,-2.90,Metro fare,transport

@@ -1,0 +1,76 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 11rem;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.select,
+.selectNeedsReview {
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid #d1d5db;
+  background: transparent;
+  color: inherit;
+  max-width: 9.5rem;
+}
+
+.selectNeedsReview {
+  border-color: #d97706;
+  background: #fffbeb;
+}
+
+.source {
+  font-size: 0.7rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.sourceNeedsReview {
+  color: #b45309;
+  font-weight: 600;
+}
+
+.status {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.error {
+  font-size: 0.75rem;
+  color: #b91c1c;
+}
+
+@media (prefers-color-scheme: dark) {
+  .select,
+  .selectNeedsReview {
+    border-color: #4b5563;
+  }
+
+  .selectNeedsReview {
+    background: #451a03;
+    border-color: #d97706;
+  }
+
+  .source,
+  .status {
+    color: #9ca3af;
+  }
+
+  .sourceNeedsReview {
+    color: #fbbf24;
+  }
+
+  .error {
+    color: #fca5a5;
+  }
+}

@@ -1,0 +1,782 @@
+[
+  {
+    "merchant": "Whole Foods",
+    "description": "Weekly groceries",
+    "category": "groceries",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Safeway",
+    "description": "Produce and milk",
+    "category": "groceries",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Trader Joe's",
+    "description": "Organic food haul",
+    "category": "groceries",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Kroger",
+    "description": "Pantry restock",
+    "category": "groceries",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Costco",
+    "description": "Bulk groceries",
+    "category": "groceries",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Aldi",
+    "description": "Discount groceries",
+    "category": "groceries",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Publix",
+    "description": "Deli and produce",
+    "category": "groceries",
+    "category_source": "user"
+  },
+  {
+    "merchant": "H-E-B",
+    "description": "Family grocery run",
+    "category": "groceries",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Wegmans",
+    "description": "Fresh vegetables",
+    "category": "groceries",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Giant Eagle",
+    "description": "Household groceries",
+    "category": "groceries",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Chipotle",
+    "description": "Burrito bowl lunch",
+    "category": "dining",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Starbucks",
+    "description": "Iced latte",
+    "category": "dining",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "McDonald's",
+    "description": "Drive thru meal",
+    "category": "dining",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Olive Garden",
+    "description": "Dinner with family",
+    "category": "dining",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "DoorDash",
+    "description": "Restaurant delivery",
+    "category": "dining",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Uber Eats",
+    "description": "Thai takeout",
+    "category": "dining",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Sweetgreen",
+    "description": "Salad lunch",
+    "category": "dining",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Panera Bread",
+    "description": "Soup and sandwich",
+    "category": "dining",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Dunkin'",
+    "description": "Coffee and bagel",
+    "category": "dining",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Taco Bell",
+    "description": "Late night tacos",
+    "category": "dining",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Uber",
+    "description": "Ride to airport",
+    "category": "transportation",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Lyft",
+    "description": "Shared ride downtown",
+    "category": "transportation",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Shell",
+    "description": "Gas fill-up",
+    "category": "transportation",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Chevron",
+    "description": "Fuel purchase",
+    "category": "transportation",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Metro Transit",
+    "description": "Monthly pass",
+    "category": "transportation",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Parking Garage",
+    "description": "Downtown parking",
+    "category": "transportation",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Enterprise Rent-A-Car",
+    "description": "Weekend rental",
+    "category": "transportation",
+    "category_source": "user"
+  },
+  {
+    "merchant": "ExxonMobil",
+    "description": "Gasoline",
+    "category": "transportation",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "City Bus",
+    "description": "Bus fare",
+    "category": "transportation",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Toll Road Authority",
+    "description": "Highway toll",
+    "category": "transportation",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "United Airlines",
+    "description": "Flight to Chicago",
+    "category": "travel",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Delta Air Lines",
+    "description": "Roundtrip airfare",
+    "category": "travel",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Marriott",
+    "description": "Hotel stay 2 nights",
+    "category": "travel",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Airbnb",
+    "description": "Vacation rental",
+    "category": "travel",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Hilton",
+    "description": "Business hotel",
+    "category": "travel",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Southwest Airlines",
+    "description": "Domestic flight",
+    "category": "travel",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Expedia",
+    "description": "Trip booking",
+    "category": "travel",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Hertz",
+    "description": "Airport car rental",
+    "category": "travel",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "American Airlines",
+    "description": "Weekend getaway flight",
+    "category": "travel",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Hyatt",
+    "description": "Conference hotel",
+    "category": "travel",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Amazon",
+    "description": "Household items order",
+    "category": "shopping",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Target",
+    "description": "Home goods",
+    "category": "shopping",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Walmart",
+    "description": "General merchandise",
+    "category": "shopping",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Best Buy",
+    "description": "Electronics accessories",
+    "category": "shopping",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Nike",
+    "description": "Running shoes",
+    "category": "shopping",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Apple Store",
+    "description": "Phone case",
+    "category": "shopping",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "IKEA",
+    "description": "Furniture and decor",
+    "category": "shopping",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Home Depot",
+    "description": "Tools and supplies",
+    "category": "shopping",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Macy's",
+    "description": "Clothing purchase",
+    "category": "shopping",
+    "category_source": "user"
+  },
+  {
+    "merchant": "eBay",
+    "description": "Online marketplace order",
+    "category": "shopping",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Netflix",
+    "description": "Streaming subscription",
+    "category": "subscriptions",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Spotify",
+    "description": "Music premium plan",
+    "category": "subscriptions",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Disney+",
+    "description": "Monthly streaming",
+    "category": "subscriptions",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Hulu",
+    "description": "TV streaming plan",
+    "category": "subscriptions",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Adobe Creative Cloud",
+    "description": "Software subscription",
+    "category": "subscriptions",
+    "category_source": "user"
+  },
+  {
+    "merchant": "iCloud",
+    "description": "Cloud storage plan",
+    "category": "subscriptions",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "YouTube Premium",
+    "description": "Ad-free subscription",
+    "category": "subscriptions",
+    "category_source": "user"
+  },
+  {
+    "merchant": "The New York Times",
+    "description": "Digital news subscription",
+    "category": "subscriptions",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Dropbox",
+    "description": "Cloud backup plan",
+    "category": "subscriptions",
+    "category_source": "user"
+  },
+  {
+    "merchant": "GitHub",
+    "description": "Pro developer plan",
+    "category": "subscriptions",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "AMC Theatres",
+    "description": "Movie tickets",
+    "category": "entertainment",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Steam",
+    "description": "Video game purchase",
+    "category": "entertainment",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Ticketmaster",
+    "description": "Concert tickets",
+    "category": "entertainment",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Bowling Alley",
+    "description": "Friday night bowling",
+    "category": "entertainment",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Museum of Modern Art",
+    "description": "Exhibit admission",
+    "category": "entertainment",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Xbox",
+    "description": "Game download",
+    "category": "entertainment",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Comedy Club",
+    "description": "Live show tickets",
+    "category": "entertainment",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Mini Golf Park",
+    "description": "Family outing",
+    "category": "entertainment",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "PlayStation Store",
+    "description": "Digital game",
+    "category": "entertainment",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Local Zoo",
+    "description": "Day pass tickets",
+    "category": "entertainment",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "PG&E",
+    "description": "Electric bill",
+    "category": "utilities",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Comcast",
+    "description": "Internet service",
+    "category": "utilities",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "AT&T Wireless",
+    "description": "Phone bill",
+    "category": "utilities",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Water Utility Co",
+    "description": "Water service",
+    "category": "utilities",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "National Grid",
+    "description": "Gas utility bill",
+    "category": "utilities",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Verizon Fios",
+    "description": "Home internet",
+    "category": "utilities",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "T-Mobile",
+    "description": "Mobile service",
+    "category": "utilities",
+    "category_source": "user"
+  },
+  {
+    "merchant": "City Trash Service",
+    "description": "Waste collection",
+    "category": "utilities",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "SoCal Edison",
+    "description": "Power bill",
+    "category": "utilities",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Spectrum",
+    "description": "Cable internet",
+    "category": "utilities",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "CVS Pharmacy",
+    "description": "Prescription refill",
+    "category": "healthcare",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Walgreens",
+    "description": "OTC medicine",
+    "category": "healthcare",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Kaiser Permanente",
+    "description": "Copay visit",
+    "category": "healthcare",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Dental Care Clinic",
+    "description": "Teeth cleaning",
+    "category": "healthcare",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Vision Center",
+    "description": "Eye exam",
+    "category": "healthcare",
+    "category_source": "user"
+  },
+  {
+    "merchant": "LabCorp",
+    "description": "Bloodwork lab fee",
+    "category": "healthcare",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Urgent Care Center",
+    "description": "Walk-in visit",
+    "category": "healthcare",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Rite Aid",
+    "description": "Pharmacy items",
+    "category": "healthcare",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Physical Therapy Plus",
+    "description": "PT session",
+    "category": "healthcare",
+    "category_source": "user"
+  },
+  {
+    "merchant": "City Hospital",
+    "description": "Outpatient fee",
+    "category": "healthcare",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Apartment Rent",
+    "description": "Monthly rent payment",
+    "category": "housing",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Mortgage Servicer",
+    "description": "Mortgage payment",
+    "category": "housing",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "HOA Management",
+    "description": "HOA dues",
+    "category": "housing",
+    "category_source": "user"
+  },
+  {
+    "merchant": "State Farm Insurance",
+    "description": "Renters insurance",
+    "category": "housing",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Property Management LLC",
+    "description": "Lease payment",
+    "category": "housing",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Home Warranty Co",
+    "description": "Warranty plan",
+    "category": "housing",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Landlord Direct",
+    "description": "Rent ACH",
+    "category": "housing",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Escrow Services",
+    "description": "Property tax escrow",
+    "category": "housing",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Condo Association",
+    "description": "Monthly assessment",
+    "category": "housing",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Storage Unit Co",
+    "description": "Storage locker rent",
+    "category": "housing",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Acme Payroll",
+    "description": "Biweekly paycheck",
+    "category": "income",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Direct Deposit Employer",
+    "description": "Salary deposit",
+    "category": "income",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Client Invoice Payment",
+    "description": "Freelance payout",
+    "category": "income",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Tax Refund IRS",
+    "description": "Federal refund",
+    "category": "income",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Side Gig Platform",
+    "description": "Contract earnings",
+    "category": "income",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Dividend Brokerage",
+    "description": "Stock dividend",
+    "category": "income",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Interest Savings Bank",
+    "description": "Interest credit",
+    "category": "income",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Bonus Payment Co",
+    "description": "Annual bonus",
+    "category": "income",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Venmo Payment Received",
+    "description": "Friend repaid lunch",
+    "category": "income",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Consulting Client LLC",
+    "description": "Invoice 1042 paid",
+    "category": "income",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Whole Foods",
+    "description": "Organic berries and bread",
+    "category": "groceries",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Safeway",
+    "description": "Eggs and cereal",
+    "category": "groceries",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Uber",
+    "description": "Evening commute home",
+    "category": "transportation",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Lyft",
+    "description": "Ride to office",
+    "category": "transportation",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Netflix",
+    "description": "Monthly membership renewal",
+    "category": "subscriptions",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Spotify",
+    "description": "Family plan billing",
+    "category": "subscriptions",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Amazon",
+    "description": "Kitchen gadgets order",
+    "category": "shopping",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Target",
+    "description": "Cleaning supplies",
+    "category": "shopping",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Starbucks",
+    "description": "Morning coffee run",
+    "category": "dining",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Chipotle",
+    "description": "Dinner burrito",
+    "category": "dining",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "CVS Pharmacy",
+    "description": "Vitamins purchase",
+    "category": "healthcare",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Walgreens",
+    "description": "Cold medicine",
+    "category": "healthcare",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "PG&E",
+    "description": "Monthly energy bill",
+    "category": "utilities",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Comcast",
+    "description": "Internet renewal",
+    "category": "utilities",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "United Airlines",
+    "description": "Return flight booking",
+    "category": "travel",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Marriott",
+    "description": "Extra hotel night",
+    "category": "travel",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "Apartment Rent",
+    "description": "Rent for next month",
+    "category": "housing",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Acme Payroll",
+    "description": "Second paycheck this month",
+    "category": "income",
+    "category_source": "csv"
+  },
+  {
+    "merchant": "AMC Theatres",
+    "description": "Matinee tickets",
+    "category": "entertainment",
+    "category_source": "user"
+  },
+  {
+    "merchant": "Steam",
+    "description": "Indie game bundle",
+    "category": "entertainment",
+    "category_source": "csv"
+  }
+]

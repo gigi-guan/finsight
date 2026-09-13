@@ -1,0 +1,46 @@
+# Dependencies & environments
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Next.js
+frontend/.next/
+frontend/out/
+
+# Env & secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Editors & OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs & tooling
+*.log
+npm-debug.log*
+.turbo/
+.vercel/
+
+# Python packaging
+backend/*.egg-info/
+
+# ML artifacts (trained models) — keep fixtures in git
+backend/app/ml/categorization/artifacts/*
+!backend/app/ml/categorization/artifacts/.gitkeep
+
