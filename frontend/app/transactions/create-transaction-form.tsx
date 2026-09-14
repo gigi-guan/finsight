@@ -4,7 +4,8 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import { createTransaction } from "@/lib/api/transactions";
-import { ApiError } from "@/lib/api/client";
+import { todayIsoDate } from "@/lib/dates";
+import { getErrorMessage } from "@/lib/errors";
 import type { Account } from "@/types/account";
 import {
   TRANSACTION_CATEGORIES,
@@ -26,10 +27,6 @@ type FieldErrors = Partial<Record<keyof FormFields, string>>;
 
 /** Signed decimal: optional minus, up to 12 digits, optional .xx */
 const DECIMAL_PATTERN = /^-?\d{1,12}(\.\d{1,2})?$/;
-
-function todayIsoDate(): string {
-  return new Date().toISOString().slice(0, 10);
-}
 
 function initialFields(accounts: Account[]): FormFields {
   return {
@@ -114,13 +111,7 @@ export default function CreateTransactionForm({
       setSuccessMessage(`Added “${created.merchant}”.`);
       router.refresh();
     } catch (error) {
-      if (error instanceof ApiError) {
-        setApiError(error.message);
-      } else if (error instanceof Error) {
-        setApiError(error.message);
-      } else {
-        setApiError("Unable to create transaction.");
-      }
+      setApiError(getErrorMessage(error, "Unable to create transaction."));
     } finally {
       setIsSubmitting(false);
     }

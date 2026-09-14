@@ -1,8 +1,7 @@
-import Link from "next/link";
-
+import PageShell from "@/components/page-shell";
 import { getAccounts } from "@/lib/api/accounts";
 import { getRecurringSeries } from "@/lib/api/recurring";
-import { ApiError } from "@/lib/api/client";
+import { getErrorMessage } from "@/lib/errors";
 import { amountTone, formatSignedUsd, formatUsd } from "@/lib/format";
 import type { Account } from "@/types/account";
 import type { RecurringSeries } from "@/types/recurring";
@@ -44,13 +43,7 @@ export default async function RecurringPage({ searchParams }: RecurringPageProps
       getRecurringSeries(accountId),
     ]);
   } catch (error) {
-    if (error instanceof ApiError) {
-      errorMessage = error.message;
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    } else {
-      errorMessage = "Unable to load recurring series.";
-    }
+    errorMessage = getErrorMessage(error, "Unable to load recurring series.");
   }
 
   const accountName = new Map(accounts.map((a) => [a.id, a.name]));
@@ -58,22 +51,10 @@ export default async function RecurringPage({ searchParams }: RecurringPageProps
   const income = series.filter((s) => Number(s.average_amount) > 0);
 
   return (
-    <main className={styles.page}>
-      <p className={styles.nav}>
-        <Link href="/">Dashboard</Link>
-        <Link href="/accounts">Accounts</Link>
-        <Link href="/transactions">Transactions</Link>
-      </p>
-
-      <header className={styles.header}>
-        <p className={styles.brand}>FinSight</p>
-        <h1 className={styles.title}>Recurring</h1>
-        <p className={styles.subtitle}>
-          Deterministic detection from payment history. Confidence is a heuristic
-          score, not an ML probability.
-        </p>
-      </header>
-
+    <PageShell
+      title="Recurring"
+      subtitle="Deterministic detection from payment history. Confidence is a heuristic score, not an ML probability."
+    >
       <form className={styles.filters} method="get">
         <div className={styles.field}>
           <label htmlFor="account_id">Account</label>
@@ -118,7 +99,7 @@ export default async function RecurringPage({ searchParams }: RecurringPageProps
           />
         </>
       )}
-    </main>
+    </PageShell>
   );
 }
 

@@ -1,8 +1,8 @@
-import Link from "next/link";
-
+import PageShell from "@/components/page-shell";
 import { getAccounts } from "@/lib/api/accounts";
 import { getAnalyticsSummary } from "@/lib/api/analytics";
-import { ApiError } from "@/lib/api/client";
+import { currentMonthLabel, monthOptions } from "@/lib/dates";
+import { getErrorMessage } from "@/lib/errors";
 import { amountTone, formatSignedUsd, formatUsd } from "@/lib/format";
 import type { Account } from "@/types/account";
 import type { AnalyticsSummary } from "@/types/analytics";
@@ -13,30 +13,6 @@ export const metadata = {
   title: "Dashboard · FinSight",
   description: "Personal financial intelligence dashboard",
 };
-
-function currentMonthLabel(): string {
-  const now = new Date();
-  const month = String(now.getMonth() + 1).padStart(2, "0");
-  return `${now.getFullYear()}-${month}`;
-}
-
-function monthOptions(selected: string): string[] {
-  const options: string[] = [];
-  const [yearStr, monthStr] = selected.split("-");
-  let year = Number(yearStr);
-  let month = Number(monthStr);
-
-  // Build 12 months ending at the selected/current month.
-  for (let i = 0; i < 12; i += 1) {
-    options.push(`${year}-${String(month).padStart(2, "0")}`);
-    month -= 1;
-    if (month === 0) {
-      month = 12;
-      year -= 1;
-    }
-  }
-  return options;
-}
 
 function barWidthPercent(amount: string, maxAmount: string): string {
   const value = Number(amount);
@@ -53,7 +29,8 @@ type HomeProps = {
 
 export default async function Home({ searchParams }: HomeProps) {
   const params = await searchParams;
-  const month = params.month?.trim() || currentMonthLabel();
+  const current = currentMonthLabel();
+  const month = params.month?.trim() || current;
   const accountIdRaw = params.account_id?.trim();
   const accountId =
     accountIdRaw && /^\d+$/.test(accountIdRaw) ? Number(accountIdRaw) : undefined;
@@ -66,16 +43,10 @@ export default async function Home({ searchParams }: HomeProps) {
     accounts = await getAccounts();
     summary = await getAnalyticsSummary({ month, accountId });
   } catch (error) {
-    if (error instanceof ApiError) {
-      errorMessage = error.message;
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    } else {
-      errorMessage = "Unable to load dashboard analytics.";
-    }
+    errorMessage = getErrorMessage(error, "Unable to load dashboard analytics.");
   }
 
-  const months = monthOptions(month);
+  const months = monthOptions(month, current);
   const maxCategory = summary?.spending_by_category[0]?.amount ?? "0";
   const maxMerchant = summary?.top_merchants[0]?.amount ?? "0";
   const netTone = summary ? amountTone(summary.net_cash_flow) : "zero";
@@ -84,21 +55,10 @@ export default async function Home({ searchParams }: HomeProps) {
     : "zero";
 
   return (
-    <main className={styles.page}>
-      <p className={styles.nav}>
-        <Link href="/accounts">Accounts</Link>
-        <Link href="/transactions">Transactions</Link>
-        <Link href="/recurring">Recurring</Link>
-      </p>
-
-      <header className={styles.header}>
-        <p className={styles.brand}>FinSight</p>
-        <h1 className={styles.title}>Dashboard</h1>
-        <p className={styles.subtitle}>
-          Monthly cash-flow summary computed by the API from PostgreSQL.
-        </p>
-      </header>
-
+    <PageShell
+      title="Dashboard"
+      subtitle="Monthly cash-flow summary computed by the API from PostgreSQL."
+    >
       <form className={styles.filters} method="get">
         <div className={styles.field}>
           <label htmlFor="month">Month</label>
@@ -280,6 +240,6 @@ export default async function Home({ searchParams }: HomeProps) {
           </div>
         </>
       ) : null}
-    </main>
+    </PageShell>
   );
 }

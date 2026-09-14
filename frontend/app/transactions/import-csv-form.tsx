@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import { importTransactionsCsv } from "@/lib/api/transactions";
-import { ApiError } from "@/lib/api/client";
+import { getErrorMessage } from "@/lib/errors";
 import type { Account } from "@/types/account";
 import type { TransactionImportResult } from "@/types/transaction";
 
@@ -45,19 +45,11 @@ export default function ImportCsvForm({ accounts }: ImportCsvFormProps) {
       const summary = await importTransactionsCsv(Number(accountId), file);
       setResult(summary);
       setFile(null);
-      // Reset file input via form reset of that control by clearing value through key...
-      // Re-fetch server-rendered list when anything was imported.
       if (summary.imported > 0) {
         router.refresh();
       }
     } catch (error) {
-      if (error instanceof ApiError) {
-        setApiError(error.message);
-      } else if (error instanceof Error) {
-        setApiError(error.message);
-      } else {
-        setApiError("Unable to import CSV.");
-      }
+      setApiError(getErrorMessage(error, "Unable to import CSV."));
     } finally {
       setIsUploading(false);
     }

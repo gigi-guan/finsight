@@ -1,11 +1,12 @@
 import Link from "next/link";
 
+import PageShell from "@/components/page-shell";
 import { getAccounts } from "@/lib/api/accounts";
 import { getTransactions } from "@/lib/api/transactions";
-import { ApiError } from "@/lib/api/client";
+import { getErrorMessage } from "@/lib/errors";
 import { amountTone, formatSignedUsd } from "@/lib/format";
 import type { Account } from "@/types/account";
-import type { CategorySource, Transaction } from "@/types/transaction";
+import type { Transaction } from "@/types/transaction";
 
 import CategoryEditor from "./category-editor";
 import CreateTransactionForm from "./create-transaction-form";
@@ -56,13 +57,7 @@ export default async function TransactionsPage({
       getTransactions(),
     ]);
   } catch (error) {
-    if (error instanceof ApiError) {
-      errorMessage = error.message;
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    } else {
-      errorMessage = "Unable to load transactions.";
-    }
+    errorMessage = getErrorMessage(error, "Unable to load transactions.");
   }
 
   const visible = transactions.filter((tx) =>
@@ -80,22 +75,10 @@ export default async function TransactionsPage({
   ];
 
   return (
-    <main className={styles.page}>
-      <p className={styles.nav}>
-        <Link href="/">Dashboard</Link>
-        <Link href="/accounts">Accounts</Link>
-        <Link href="/recurring">Recurring</Link>
-      </p>
-
-      <header className={styles.header}>
-        <p className={styles.brand}>FinSight</p>
-        <h1 className={styles.title}>Transactions</h1>
-        <p className={styles.subtitle}>
-          Review and correct categories — user edits become trusted training
-          labels.
-        </p>
-      </header>
-
+    <PageShell
+      title="Transactions"
+      subtitle="Review and correct categories — user edits become trusted training labels."
+    >
       <CreateTransactionForm accounts={accounts} />
       <ImportCsvForm accounts={accounts} />
 
@@ -164,7 +147,7 @@ export default async function TransactionsPage({
                       <CategoryEditor
                         transactionId={tx.id}
                         category={tx.category}
-                        categorySource={tx.category_source as CategorySource}
+                        categorySource={tx.category_source}
                       />
                     </td>
                     <td>{tx.account_name}</td>
@@ -176,6 +159,6 @@ export default async function TransactionsPage({
           </table>
         </div>
       )}
-    </main>
+    </PageShell>
   );
 }

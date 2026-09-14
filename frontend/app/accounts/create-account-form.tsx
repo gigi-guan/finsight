@@ -4,7 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 
 import { createAccount } from "@/lib/api/accounts";
-import { ApiError } from "@/lib/api/client";
+import { getErrorMessage } from "@/lib/errors";
 import {
   ACCOUNT_TYPES,
   type AccountCreate,
@@ -91,16 +91,9 @@ export default function CreateAccountForm() {
       setFields(INITIAL_FIELDS);
       setFieldErrors({});
       setSuccessMessage(`Created “${created.name}”.`);
-      // Re-run the Server Component so the list includes the new row.
       router.refresh();
     } catch (error) {
-      if (error instanceof ApiError) {
-        setApiError(error.message);
-      } else if (error instanceof Error) {
-        setApiError(error.message);
-      } else {
-        setApiError("Unable to create account.");
-      }
+      setApiError(getErrorMessage(error, "Unable to create account."));
     } finally {
       setIsSubmitting(false);
     }

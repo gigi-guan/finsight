@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { updateTransactionCategory } from "@/lib/api/transactions";
-import { ApiError } from "@/lib/api/client";
+import { getErrorMessage } from "@/lib/errors";
 import {
   TRANSACTION_CATEGORIES,
   type CategorySource,
@@ -44,13 +44,7 @@ export default function CategoryEditor({
       router.refresh();
     } catch (err) {
       setValue(previous);
-      if (err instanceof ApiError) {
-        setError(err.message);
-      } else if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Could not update category.");
-      }
+      setError(getErrorMessage(err, "Could not update category."));
     } finally {
       setIsSaving(false);
     }

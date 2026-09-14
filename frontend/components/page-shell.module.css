@@ -1,0 +1,72 @@
+.page {
+  flex: 1;
+  width: 100%;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.35rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.brand {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+
+.title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.subtitle {
+  font-size: 0.95rem;
+  color: #6b7280;
+  line-height: 1.45;
+}
+
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.15rem;
+  font-size: 0.875rem;
+  align-items: center;
+}
+
+.navItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.sep {
+  color: #9ca3af;
+  user-select: none;
+}
+
+.nav a {
+  color: #374151;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .brand,
+  .subtitle,
+  .sep {
+    color: #9ca3af;
+  }
+
+  .nav a {
+    color: #d1d5db;
+  }
+}

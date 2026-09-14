@@ -1,11 +1,10 @@
-import Link from "next/link";
-
+import PageShell from "@/components/page-shell";
 import { getAccounts } from "@/lib/api/accounts";
-import CreateAccountForm from "./create-account-form";
-import { ApiError } from "@/lib/api/client";
+import { getErrorMessage } from "@/lib/errors";
 import { formatUsd } from "@/lib/format";
 import type { Account } from "@/types/account";
 
+import CreateAccountForm from "./create-account-form";
 import styles from "./accounts.module.css";
 
 export const metadata = {
@@ -20,33 +19,14 @@ export default async function AccountsPage() {
   try {
     accounts = await getAccounts();
   } catch (error) {
-    if (error instanceof ApiError) {
-      errorMessage = error.message;
-    } else if (error instanceof Error) {
-      errorMessage = error.message;
-    } else {
-      errorMessage = "Unable to load accounts.";
-    }
+    errorMessage = getErrorMessage(error, "Unable to load accounts.");
   }
 
   return (
-    <main className={styles.page}>
-      <p className={styles.nav}>
-        <Link href="/">Dashboard</Link>
-        {" · "}
-        <Link href="/transactions">Transactions</Link>
-        {" · "}
-        <Link href="/recurring">Recurring</Link>
-      </p>
-
-      <header className={styles.header}>
-        <p className={styles.brand}>FinSight</p>
-        <h1 className={styles.title}>Accounts</h1>
-        <p className={styles.subtitle}>
-          Create an account and record a snapshot balance (not a live ledger).
-        </p>
-      </header>
-
+    <PageShell
+      title="Accounts"
+      subtitle="Create an account and record a snapshot balance (not a live ledger)."
+    >
       <CreateAccountForm />
 
       {errorMessage ? (
@@ -87,6 +67,6 @@ export default async function AccountsPage() {
           </table>
         </div>
       )}
-    </main>
+    </PageShell>
   );
 }
