@@ -117,6 +117,9 @@ pip install -e ".[ml,dev]"
 python -m app.ml.categorization.train
 ```
 
+Committed evidence: `backend/app/ml/categorization/RESULTS.md` and `results_metrics.json`.
+Heavy `.joblib` model files stay gitignored.
+
 ### Methodology and limitations
 
 - Trusted labels for training would be `user`/`csv` only; real DB labels are currently **insufficient**.

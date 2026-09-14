@@ -1,8 +1,11 @@
 """Offline categorization training + evaluation CLI.
 
-Usage (from backend/ with venv active):
+Usage (from backend/ with venv active and optional ML deps installed):
 
+    pip install -e ".[ml,dev]"
     python -m app.ml.categorization.train
+
+Offline experiment only — not wired into the live API.
 """
 
 from __future__ import annotations
@@ -23,16 +26,25 @@ from app.ml.categorization.data import (
     summarize_examples,
 )
 from app.ml.categorization.evaluate import (
+    GROUPED_EVAL_SEEDS,
+    RANDOM_STATE,
+    evaluate_pipeline_grouped_multi_seed,
     evaluate_pipeline_on_split,
     evaluate_rules,
     make_grouped_split,
     make_random_split,
     top_confusions,
 )
-from app.ml.categorization.features import build_logreg_pipeline
+from app.ml.categorization.features import (
+    build_logreg_pipeline,
+    examples_to_labels,
+    examples_to_texts,
+)
 from app.services.transaction_normalize import CANONICAL_CATEGORIES
 
 ARTIFACTS_DIR = Path(__file__).resolve().parent / "artifacts"
+RESULTS_MD = Path(__file__).resolve().parent / "RESULTS.md"
+RESULTS_JSON = Path(__file__).resolve().parent / "results_metrics.json"
 MODEL_VERSION = "categorization-tfidf-logreg-v1"
 
 
@@ -92,18 +104,31 @@ def _run_model_suite(examples, *, dataset_name: str) -> dict[str, Any]:
 
     rule_metrics = evaluate_rules(examples)
     _print_metrics(f"{dataset_name} / rule baseline (full set)", rule_metrics)
+    print(
+        "\nNOTE: Rule baseline is NOT an independent benchmark — keyword rules "
+        "overlap synthetic fixture vocabulary (and would overlap many demo merchants)."
+    )
+    print(
+        "NOTE: Synthetic description text carries much of the TF-IDF signal and "
+        "may not resemble noisy real bank-feed descriptors."
+    )
     results["rule_baseline"] = rule_metrics
+    results["evaluation_caveats"] = {
+        "rule_baseline_not_independent": True,
+        "synthetic_descriptions_carry_signal": True,
+        "not_integrated_into_api": True,
+    }
 
     random_split = make_random_split(examples)
-    grouped_split = make_grouped_split(examples)
+    grouped_example = make_grouped_split(examples, random_state=RANDOM_STATE)
     print(
         f"\n[{dataset_name}] random split merchants overlap: "
         f"{sorted(random_split.merchants_train & random_split.merchants_test)[:5]} "
         f"(count={len(random_split.merchants_train & random_split.merchants_test)})"
     )
     print(
-        f"[{dataset_name}] grouped split merchants overlap: "
-        f"{sorted(grouped_split.merchants_train & grouped_split.merchants_test)} "
+        f"[{dataset_name}] example grouped split (seed={RANDOM_STATE}) merchants overlap: "
+        f"{sorted(grouped_example.merchants_train & grouped_example.merchants_test)} "
         f"(must be empty)"
     )
 
@@ -111,30 +136,56 @@ def _run_model_suite(examples, *, dataset_name: str) -> dict[str, Any]:
     for class_weight in (None, "balanced"):
         label = "none" if class_weight is None else class_weight
         weight_results[label] = {}
-        for split in (random_split, grouped_split):
-            pipeline = build_logreg_pipeline(class_weight=class_weight)
-            metrics = evaluate_pipeline_on_split(
-                pipeline,
-                split,
-                class_weight=class_weight,
-            )
-            _print_metrics(
-                f"{dataset_name} / TF-IDF+LogReg / class_weight={label} / {split.name}",
-                metrics,
-            )
-            weight_results[label][split.name] = metrics
+
+        pipeline = build_logreg_pipeline(class_weight=class_weight)
+        random_metrics = evaluate_pipeline_on_split(
+            pipeline,
+            random_split,
+            class_weight=class_weight,
+        )
+        _print_metrics(
+            f"{dataset_name} / TF-IDF+LogReg / class_weight={label} / {random_split.name}",
+            random_metrics,
+        )
+        weight_results[label][random_split.name] = random_metrics
+
+        grouped_multi = evaluate_pipeline_grouped_multi_seed(
+            examples,
+            class_weight=class_weight,
+            seeds=GROUPED_EVAL_SEEDS,
+            build_pipeline=build_logreg_pipeline,
+        )
+        agg = grouped_multi["aggregate"]
+        print(
+            f"\n--- {dataset_name} / TF-IDF+LogReg / class_weight={label} / "
+            f"merchant_grouped_multi_seed (seeds={list(GROUPED_EVAL_SEEDS)}) ---"
+        )
+        for key in (
+            "accuracy",
+            "macro_precision",
+            "macro_recall",
+            "macro_f1",
+            "weighted_f1",
+        ):
+            print(f"  {key}: {agg[key]['display']}")
+        weight_results[label]["merchant_grouped_multi_seed"] = grouped_multi
 
     results["logreg"] = weight_results
-
-    # Prefer balanced + full-data fit for the saved synthetic artifact:
-    # macro metrics matter more than majority-class accuracy for categorization.
-    from app.ml.categorization.features import examples_to_labels, examples_to_texts
 
     final_pipeline = build_logreg_pipeline(class_weight="balanced")
     final_pipeline.fit(examples_to_texts(examples), examples_to_labels(examples))
     results["artifact_pipeline"] = final_pipeline
     results["artifact_class_weight"] = "balanced"
     return results
+
+
+def _serializable_evaluation(evaluation: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "rule_baseline": evaluation.get("rule_baseline"),
+        "logreg": evaluation.get("logreg"),
+        "evaluation_caveats": evaluation.get("evaluation_caveats"),
+        "artifact_class_weight": evaluation.get("artifact_class_weight"),
+    }
 
 
 def _save_artifact(
@@ -152,12 +203,6 @@ def _save_artifact(
 
     joblib.dump(pipeline, model_path)
 
-    # Drop non-serializable pipeline from nested evaluation before writing JSON.
-    serializable_eval = {
-        "rule_baseline": evaluation.get("rule_baseline"),
-        "logreg": evaluation.get("logreg"),
-        "artifact_class_weight": class_weight,
-    }
     metadata = {
         "model_version": MODEL_VERSION,
         "trained_at_utc": stamp,
@@ -172,7 +217,7 @@ def _save_artifact(
             "class_weight": class_weight,
         },
         "data_summary": summary,
-        "evaluation": serializable_eval,
+        "evaluation": _serializable_evaluation(evaluation),
         "artifact_path": str(model_path.name),
         "note": (
             "Offline experiment only. Not wired into the live API. "
@@ -185,6 +230,119 @@ def _save_artifact(
     return model_path
 
 
+def _write_committed_results(
+    *,
+    real_summary: dict[str, Any],
+    synthetic_summary: dict[str, Any],
+    synthetic_evaluation: dict[str, Any],
+) -> None:
+    """Write reproducible RESULTS.md + JSON (committed; .joblib stays gitignored)."""
+    stamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    balanced = (
+        synthetic_evaluation.get("logreg", {})
+        .get("balanced", {})
+        .get("merchant_grouped_multi_seed", {})
+    )
+    random_bal = (
+        synthetic_evaluation.get("logreg", {})
+        .get("balanced", {})
+        .get("random_stratified", {})
+    )
+    rule = synthetic_evaluation.get("rule_baseline", {})
+
+    payload = {
+        "generated_at_utc": stamp,
+        "model_version": MODEL_VERSION,
+        "not_integrated_into_api": True,
+        "real_data_summary": real_summary,
+        "synthetic_data_summary": synthetic_summary,
+        "caveats": synthetic_evaluation.get("evaluation_caveats"),
+        "synthetic_rule_baseline": {
+            "accuracy": rule.get("accuracy"),
+            "macro_f1": rule.get("macro_f1"),
+            "note": (
+                "Not an independent benchmark — rules overlap fixture vocabulary."
+            ),
+        },
+        "synthetic_logreg_balanced": {
+            "random_stratified": {
+                "accuracy": random_bal.get("accuracy"),
+                "macro_f1": random_bal.get("macro_f1"),
+            },
+            "merchant_grouped_multi_seed": balanced,
+        },
+        "grouped_seeds": list(GROUPED_EVAL_SEEDS),
+    }
+    RESULTS_JSON.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+
+    grouped_agg = balanced.get("aggregate", {})
+    lines = [
+        "# Offline categorization RESULTS",
+        "",
+        f"Generated: `{stamp}` (UTC)",
+        "",
+        "**Status: offline experiment only — not integrated into the FinSight API.**",
+        "",
+        "## Caveats",
+        "",
+        "- Real trusted labels are currently insufficient for training/integration.",
+        "- Synthetic fixture results are for pipeline demonstration only.",
+        "- Synthetic **description** text carries much of the TF-IDF signal and may",
+        "  not resemble noisy real bank-feed descriptors.",
+        "- The **rule baseline is not an independent benchmark**: keyword rules",
+        "  overlap the synthetic fixture vocabulary.",
+        "- Prefer **merchant-grouped** metrics over random splits; random splits can",
+        "  look optimistic when the same merchant appears in train and test.",
+        "- Grouped metrics below are **mean ± sample std** over seeds",
+        f"  `{list(GROUPED_EVAL_SEEDS)}`.",
+        "",
+        "## Real data",
+        "",
+        f"- Usable labeled rows: **{real_summary.get('total', 0)}**",
+        f"- Classes: `{real_summary.get('classes', [])}`",
+        "- Conclusion: **not enough data** for meaningful real-data ML evaluation.",
+        "",
+        "## Synthetic fixture (LogReg class_weight=balanced)",
+        "",
+        f"- Rows: **{synthetic_summary.get('total', 0)}**, "
+        f"merchants: **{synthetic_summary.get('unique_merchants', 0)}**",
+        f"- Rule baseline (full set): accuracy="
+        f"{rule.get('accuracy')}, macro_f1={rule.get('macro_f1')} "
+        "(not independent)",
+        f"- Random stratified: accuracy={random_bal.get('accuracy')}, "
+        f"macro_f1={random_bal.get('macro_f1')}",
+        "- Merchant-grouped multi-seed:",
+    ]
+    for key in (
+        "accuracy",
+        "macro_precision",
+        "macro_recall",
+        "macro_f1",
+        "weighted_f1",
+    ):
+        display = grouped_agg.get(key, {}).get("display", "n/a")
+        lines.append(f"  - {key}: **{display}**")
+    lines.extend(
+        [
+            "",
+            "## Reproduction",
+            "",
+            "```bash",
+            "cd backend",
+            'pip install -e ".[ml,dev]"',
+            "python -m app.ml.categorization.train",
+            "```",
+            "",
+            "Heavy `.joblib` artifacts remain gitignored; this file and "
+            "`results_metrics.json` are the committed evidence.",
+            "",
+        ]
+    )
+    RESULTS_MD.write_text("\n".join(lines), encoding="utf-8")
+    print(f"\nWrote committed results: {RESULTS_MD}")
+    print(f"Wrote committed metrics:  {RESULTS_JSON}")
+
+
 def main() -> None:
     _print_header("FinSight offline categorization experiment")
     print("Trusted label sources:", sorted(TRUSTED_SOURCES))
@@ -193,8 +351,8 @@ def main() -> None:
         "Note: `other` is excluded because it is a heterogeneous catch-all "
         "from unsupported labels, not a coherent class."
     )
+    print("Decision: do NOT integrate predictions into the production API.")
 
-    # --- Real DB labels ---
     _print_header("REAL database labels")
     real_examples = load_real_examples()
     real_summary = summarize_examples(real_examples)
@@ -210,7 +368,6 @@ def main() -> None:
             "Will run the full experiment on a SEPARATE synthetic fixture instead."
         )
         if real_examples:
-            # Still show rule baseline on whatever trusted rows exist (honest, tiny).
             _print_metrics(
                 "real / rule baseline (tiny set — illustrative only)",
                 evaluate_rules(real_examples),
@@ -225,7 +382,6 @@ def main() -> None:
             class_weight=real_results["artifact_class_weight"],
         )
 
-    # --- Synthetic fixture (clearly separated) ---
     _print_header("SYNTHETIC fixture (development only — not mixed with real eval)")
     synthetic_examples = load_synthetic_examples()
     synthetic_summary = summarize_examples(synthetic_examples)
@@ -241,6 +397,11 @@ def main() -> None:
         summary=synthetic_summary,
         evaluation=synthetic_results,
         class_weight=synthetic_results["artifact_class_weight"],
+    )
+    _write_committed_results(
+        real_summary=real_summary,
+        synthetic_summary=synthetic_summary,
+        synthetic_evaluation=synthetic_results,
     )
 
     _print_header("Done")

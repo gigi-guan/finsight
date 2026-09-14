@@ -27,6 +27,8 @@ from app.ml.categorization.rules import predict_many
 
 RANDOM_STATE = 42
 TEST_SIZE = 0.25
+# Multiple seeds for merchant-grouped eval — single splits are noisy on small fixtures.
+GROUPED_EVAL_SEEDS: tuple[int, ...] = (42, 7, 11, 19, 23)
 
 
 @dataclass
@@ -69,7 +71,11 @@ def make_random_split(examples: Sequence[LabeledExample]) -> SplitResult:
     return _split_from_indices("random_stratified", examples, texts, labels, groups, train_idx, test_idx)
 
 
-def make_grouped_split(examples: Sequence[LabeledExample]) -> SplitResult:
+def make_grouped_split(
+    examples: Sequence[LabeledExample],
+    *,
+    random_state: int = RANDOM_STATE,
+) -> SplitResult:
     texts = examples_to_texts(examples)
     labels = examples_to_labels(examples)
     groups = examples_to_groups(examples)
@@ -78,7 +84,7 @@ def make_grouped_split(examples: Sequence[LabeledExample]) -> SplitResult:
     splitter = GroupShuffleSplit(
         n_splits=1,
         test_size=TEST_SIZE,
-        random_state=RANDOM_STATE,
+        random_state=random_state,
     )
     train_idx, test_idx = next(splitter.split(indices, labels, groups=groups))
     split = _split_from_indices(
@@ -92,6 +98,76 @@ def make_grouped_split(examples: Sequence[LabeledExample]) -> SplitResult:
     )
     assert_no_group_leakage(split.groups_train, split.groups_test)
     return split
+
+
+def summarize_metric_runs(
+    runs: Sequence[dict[str, Any]],
+    *,
+    seeds: Sequence[int],
+) -> dict[str, Any]:
+    """Aggregate scalar metrics across seeds as mean ± sample std."""
+    keys = (
+        "accuracy",
+        "macro_precision",
+        "macro_recall",
+        "macro_f1",
+        "weighted_f1",
+    )
+    aggregate: dict[str, Any] = {
+        "n_seeds": len(runs),
+        "seeds": list(seeds),
+    }
+    for key in keys:
+        values = [float(run[key]) for run in runs]
+        mean = float(np.mean(values)) if values else 0.0
+        std = float(np.std(values, ddof=1)) if len(values) > 1 else 0.0
+        aggregate[key] = {
+            "mean": mean,
+            "std": std,
+            "values": values,
+            "display": f"{mean:.3f} ± {std:.3f}",
+        }
+    return aggregate
+
+
+def evaluate_pipeline_grouped_multi_seed(
+    examples: Sequence[LabeledExample],
+    *,
+    class_weight: str | None,
+    seeds: Sequence[int] = GROUPED_EVAL_SEEDS,
+    build_pipeline,
+) -> dict[str, Any]:
+    """Fit/eval TF-IDF+LogReg on merchant-grouped splits across several seeds."""
+    runs: list[dict[str, Any]] = []
+    for seed in seeds:
+        split = make_grouped_split(examples, random_state=seed)
+        pipeline = build_pipeline(class_weight=class_weight)
+        metrics = evaluate_pipeline_on_split(
+            pipeline,
+            split,
+            class_weight=class_weight,
+        )
+        # Keep seed runs compact for RESULTS / meta (drop bulky report text).
+        runs.append(
+            {
+                "seed": seed,
+                "accuracy": metrics["accuracy"],
+                "macro_precision": metrics["macro_precision"],
+                "macro_recall": metrics["macro_recall"],
+                "macro_f1": metrics["macro_f1"],
+                "weighted_f1": metrics["weighted_f1"],
+                "n_train": metrics["n_train"],
+                "n_test": metrics["n_test"],
+                "group_leakage": metrics["group_leakage"],
+            }
+        )
+    return {
+        "model": "tfidf_logreg",
+        "split": "merchant_grouped_multi_seed",
+        "class_weight": class_weight,
+        "aggregate": summarize_metric_runs(runs, seeds=seeds),
+        "runs": runs,
+    }
 
 
 def _split_from_indices(

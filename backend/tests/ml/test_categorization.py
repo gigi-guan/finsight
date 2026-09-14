@@ -90,6 +90,49 @@ def test_grouped_split_has_no_merchant_leakage() -> None:
     assert split.merchants_train.isdisjoint(split.merchants_test)
 
 
+def test_grouped_multi_seed_reports_mean_std() -> None:
+    from app.ml.categorization.evaluate import (
+        GROUPED_EVAL_SEEDS,
+        evaluate_pipeline_grouped_multi_seed,
+    )
+    from app.ml.categorization.features import build_logreg_pipeline
+
+    examples = [
+        LabeledExample(
+            merchant,
+            f"{merchant} description tokens for {label}",
+            label,
+            "user",
+            merchant_group_key(merchant),
+            "synthetic",
+        )
+        for merchant, label in [
+            ("Whole Foods", "groceries"),
+            ("Safeway", "groceries"),
+            ("Trader Joe", "groceries"),
+            ("Uber", "transportation"),
+            ("Lyft", "transportation"),
+            ("Shell Gas", "transportation"),
+            ("Netflix", "subscriptions"),
+            ("Spotify", "subscriptions"),
+            ("Hulu", "subscriptions"),
+            ("Target", "shopping"),
+            ("Walmart", "shopping"),
+            ("Best Buy", "shopping"),
+        ]
+    ]
+    result = evaluate_pipeline_grouped_multi_seed(
+        examples,
+        class_weight="balanced",
+        seeds=GROUPED_EVAL_SEEDS[:3],
+        build_pipeline=build_logreg_pipeline,
+    )
+    assert result["split"] == "merchant_grouped_multi_seed"
+    assert result["aggregate"]["n_seeds"] == 3
+    assert "display" in result["aggregate"]["macro_f1"]
+    assert "±" in result["aggregate"]["macro_f1"]["display"]
+
+
 def test_assert_no_group_leakage_raises() -> None:
     with pytest.raises(AssertionError, match="leakage"):
         assert_no_group_leakage(["uber", "lyft"], ["uber", "shell"])

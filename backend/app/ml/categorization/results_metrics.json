@@ -1,0 +1,219 @@
+{
+  "generated_at_utc": "2026-09-14T00:07:28Z",
+  "model_version": "categorization-tfidf-logreg-v1",
+  "not_integrated_into_api": true,
+  "real_data_summary": {
+    "total": 3,
+    "by_category": {
+      "dining": 1,
+      "groceries": 2
+    },
+    "unique_merchants": 3,
+    "merchants_per_category": {
+      "dining": 1,
+      "groceries": 2
+    },
+    "classes": [
+      "dining",
+      "groceries"
+    ]
+  },
+  "synthetic_data_summary": {
+    "total": 130,
+    "by_category": {
+      "dining": 12,
+      "entertainment": 12,
+      "groceries": 12,
+      "healthcare": 12,
+      "housing": 11,
+      "income": 11,
+      "shopping": 12,
+      "subscriptions": 12,
+      "transportation": 12,
+      "travel": 12,
+      "utilities": 12
+    },
+    "unique_merchants": 110,
+    "merchants_per_category": {
+      "dining": 10,
+      "entertainment": 10,
+      "groceries": 10,
+      "healthcare": 10,
+      "housing": 10,
+      "income": 10,
+      "shopping": 10,
+      "subscriptions": 10,
+      "transportation": 10,
+      "travel": 10,
+      "utilities": 10
+    },
+    "classes": [
+      "dining",
+      "entertainment",
+      "groceries",
+      "healthcare",
+      "housing",
+      "income",
+      "shopping",
+      "subscriptions",
+      "transportation",
+      "travel",
+      "utilities"
+    ]
+  },
+  "caveats": {
+    "rule_baseline_not_independent": true,
+    "synthetic_descriptions_carry_signal": true,
+    "not_integrated_into_api": true
+  },
+  "synthetic_rule_baseline": {
+    "accuracy": 0.8,
+    "macro_f1": 0.7925566551424673,
+    "note": "Not an independent benchmark \u2014 rules overlap fixture vocabulary."
+  },
+  "synthetic_logreg_balanced": {
+    "random_stratified": {
+      "accuracy": 0.6363636363636364,
+      "macro_f1": 0.6235209235209235
+    },
+    "merchant_grouped_multi_seed": {
+      "model": "tfidf_logreg",
+      "split": "merchant_grouped_multi_seed",
+      "class_weight": "balanced",
+      "aggregate": {
+        "n_seeds": 5,
+        "seeds": [
+          42,
+          7,
+          11,
+          19,
+          23
+        ],
+        "accuracy": {
+          "mean": 0.516744227994228,
+          "std": 0.1410569598188388,
+          "values": [
+            0.45714285714285713,
+            0.5,
+            0.34375,
+            0.5555555555555556,
+            0.7272727272727273
+          ],
+          "display": "0.517 \u00b1 0.141"
+        },
+        "macro_precision": {
+          "mean": 0.5111688311688312,
+          "std": 0.07304394697245141,
+          "values": [
+            0.46709956709956707,
+            0.5303030303030303,
+            0.40844155844155844,
+            0.5621212121212121,
+            0.5878787878787879
+          ],
+          "display": "0.511 \u00b1 0.073"
+        },
+        "macro_recall": {
+          "mean": 0.4738095238095238,
+          "std": 0.10706335324781073,
+          "values": [
+            0.41363636363636364,
+            0.437012987012987,
+            0.3606060606060606,
+            0.6335497835497835,
+            0.5242424242424243
+          ],
+          "display": "0.474 \u00b1 0.107"
+        },
+        "macro_f1": {
+          "mean": 0.44152282061372966,
+          "std": 0.10287085511629182,
+          "values": [
+            0.4075298438934803,
+            0.4315351315351315,
+            0.29228650137741047,
+            0.5298701298701298,
+            0.5463924963924964
+          ],
+          "display": "0.442 \u00b1 0.103"
+        },
+        "weighted_f1": {
+          "mean": 0.5346045036118566,
+          "std": 0.15444291529028206,
+          "values": [
+            0.452958152958153,
+            0.5536306830424478,
+            0.3525568181818182,
+            0.5444444444444445,
+            0.7694324194324195
+          ],
+          "display": "0.535 \u00b1 0.154"
+        }
+      },
+      "runs": [
+        {
+          "seed": 42,
+          "accuracy": 0.45714285714285713,
+          "macro_precision": 0.46709956709956707,
+          "macro_recall": 0.41363636363636364,
+          "macro_f1": 0.4075298438934803,
+          "weighted_f1": 0.452958152958153,
+          "n_train": 95,
+          "n_test": 35,
+          "group_leakage": false
+        },
+        {
+          "seed": 7,
+          "accuracy": 0.5,
+          "macro_precision": 0.5303030303030303,
+          "macro_recall": 0.437012987012987,
+          "macro_f1": 0.4315351315351315,
+          "weighted_f1": 0.5536306830424478,
+          "n_train": 96,
+          "n_test": 34,
+          "group_leakage": false
+        },
+        {
+          "seed": 11,
+          "accuracy": 0.34375,
+          "macro_precision": 0.40844155844155844,
+          "macro_recall": 0.3606060606060606,
+          "macro_f1": 0.29228650137741047,
+          "weighted_f1": 0.3525568181818182,
+          "n_train": 98,
+          "n_test": 32,
+          "group_leakage": false
+        },
+        {
+          "seed": 19,
+          "accuracy": 0.5555555555555556,
+          "macro_precision": 0.5621212121212121,
+          "macro_recall": 0.6335497835497835,
+          "macro_f1": 0.5298701298701298,
+          "weighted_f1": 0.5444444444444445,
+          "n_train": 94,
+          "n_test": 36,
+          "group_leakage": false
+        },
+        {
+          "seed": 23,
+          "accuracy": 0.7272727272727273,
+          "macro_precision": 0.5878787878787879,
+          "macro_recall": 0.5242424242424243,
+          "macro_f1": 0.5463924963924964,
+          "weighted_f1": 0.7694324194324195,
+          "n_train": 97,
+          "n_test": 33,
+          "group_leakage": false
+        }
+      ]
+    }
+  },
+  "grouped_seeds": [
+    42,
+    7,
+    11,
+    19,
+    23
+  ]
+}
