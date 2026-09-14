@@ -60,7 +60,11 @@ class TransactionRead(BaseModel):
 
 
 class TransactionImportError(BaseModel):
-    """One rejected CSV row (1-based spreadsheet row number)."""
+    """One rejected CSV row.
+
+    `row` is the CSV parser physical 1-based line number (`csv.DictReader.line_num`),
+    not a logical data-row index. Blank lines still advance the physical line.
+    """
 
     row: int
     field: str | None = None

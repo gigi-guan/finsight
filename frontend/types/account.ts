@@ -1,12 +1,14 @@
 /**
  * Account as returned by GET /accounts (FastAPI AccountRead).
- * current_balance is a string because JSON serializes Decimal that way.
+ * current_balance is a manually reported snapshot (not a live ledger),
+ * serialized as a string because JSON encodes Decimal that way.
  */
 export type Account = {
   id: number;
   name: string;
   account_type: string;
   institution: string;
+  /** Snapshot balance string, e.g. "1250.50" — not derived from transactions. */
   current_balance: string;
   created_at: string;
 };

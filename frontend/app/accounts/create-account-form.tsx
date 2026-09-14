@@ -46,7 +46,7 @@ function validate(fields: FormFields): FieldErrors {
   }
   const balance = fields.current_balance.trim();
   if (!balance) {
-    errors.current_balance = "Current balance is required.";
+    errors.current_balance = "Snapshot balance is required.";
   } else if (!DECIMAL_PATTERN.test(balance)) {
     errors.current_balance =
       "Enter a valid decimal amount (e.g. 1250.50), max 2 decimal places.";
@@ -189,7 +189,7 @@ export default function CreateAccountForm() {
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="account-balance">Current balance (USD)</label>
+          <label htmlFor="account-balance">Snapshot balance (USD)</label>
           <input
             id="account-balance"
             name="current_balance"

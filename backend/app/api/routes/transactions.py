@@ -55,13 +55,17 @@ def update_transaction_category(
     response_model=TransactionImportResult,
     status_code=status.HTTP_200_OK,
 )
-async def import_transactions(
+def import_transactions(
     account_id: int = Form(..., gt=0),
     file: UploadFile = File(...),
     db: Session = Depends(get_db),
 ) -> TransactionImportResult:
-    """Upload a CSV of transactions for an existing account (partial success)."""
-    return await transaction_import_service.import_transactions_from_csv(
+    """Upload a CSV of transactions for an existing account (partial success).
+
+    Sync route: matches sibling endpoints and the sync SQLAlchemy Session used
+    for parse/persist. Upload bytes are read from the SpooledTemporaryFile.
+    """
+    return transaction_import_service.import_transactions_from_csv(
         db,
         account_id=account_id,
         file=file,

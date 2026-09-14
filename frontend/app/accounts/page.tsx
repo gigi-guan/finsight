@@ -43,7 +43,7 @@ export default async function AccountsPage() {
         <p className={styles.brand}>FinSight</p>
         <h1 className={styles.title}>Accounts</h1>
         <p className={styles.subtitle}>
-          Create an account and see balances from the FinSight API.
+          Create an account and record a snapshot balance (not a live ledger).
         </p>
       </header>
 
@@ -69,7 +69,7 @@ export default async function AccountsPage() {
                 <th scope="col">Name</th>
                 <th scope="col">Institution</th>
                 <th scope="col">Type</th>
-                <th scope="col">Balance</th>
+                <th scope="col">Snapshot balance</th>
               </tr>
             </thead>
             <tbody>

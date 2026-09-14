@@ -22,7 +22,8 @@ class Account(Base):
     name: Mapped[str] = mapped_column(String(255), nullable=False)
     account_type: Mapped[str] = mapped_column(String(50), nullable=False)
     institution: Mapped[str] = mapped_column(String(255), nullable=False)
-    # Numeric/Decimal — never float for money (binary floating point is imprecise).
+    # Manually reported snapshot balance at create/edit time — NOT a live ledger
+    # derived from transactions. Numeric/Decimal — never float for money.
     current_balance: Mapped[Decimal] = mapped_column(Numeric(14, 2), nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),

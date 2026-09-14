@@ -12,7 +12,14 @@ class AccountCreate(BaseModel):
     name: str = Field(min_length=1, max_length=255)
     account_type: str = Field(min_length=1, max_length=50)
     institution: str = Field(min_length=1, max_length=255)
-    current_balance: Decimal = Field(max_digits=14, decimal_places=2)
+    current_balance: Decimal = Field(
+        max_digits=14,
+        decimal_places=2,
+        description=(
+            "Manually reported snapshot balance. Not updated automatically when "
+            "transactions are created or imported."
+        ),
+    )
 
 
 class AccountRead(BaseModel):
@@ -24,5 +31,7 @@ class AccountRead(BaseModel):
     name: str
     account_type: str
     institution: str
-    current_balance: Decimal
+    current_balance: Decimal = Field(
+        description="Manually reported snapshot balance (not a live ledger total)."
+    )
     created_at: datetime

@@ -20,7 +20,8 @@ class Settings(BaseSettings):
 
     app_name: str = "FinSight"
     app_env: str = "development"
-    debug: bool = True
+    # Safe default for accidental exposure; enable locally via DEBUG=true in .env.
+    debug: bool = False
 
     api_host: str = "0.0.0.0"
     api_port: int = 8000
@@ -28,8 +29,9 @@ class Settings(BaseSettings):
     # Comma-separated list in env, e.g. "http://localhost:3000,http://127.0.0.1:3000"
     cors_origins: str = "http://localhost:3000"
 
-    # SQLAlchemy / PostgreSQL connection string (psycopg v3 driver)
-    database_url: str = "postgresql+psycopg://gigiguan@localhost:5432/finsight"
+    # SQLAlchemy / PostgreSQL connection string (psycopg v3 driver).
+    # Override with your local role via DATABASE_URL — do not commit personal usernames.
+    database_url: str = "postgresql+psycopg://postgres@localhost:5432/finsight"
 
     @property
     def cors_origin_list(self) -> list[str]:

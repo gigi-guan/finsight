@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import csv
 import io
-from typing import Any
+from typing import Any, BinaryIO
 
 from fastapi import HTTPException, UploadFile, status
 from sqlalchemy import select
@@ -50,7 +50,19 @@ def _validate_headers(fieldnames: list[str] | None) -> None:
         )
 
 
-async def import_transactions_from_csv(
+def _read_upload_bytes(file: UploadFile) -> bytes:
+    """Read upload via the underlying sync SpooledTemporaryFile.
+
+    The import route is sync (like other transaction endpoints) because SQLAlchemy
+    Session I/O here is synchronous. Prefer file.file.read() over awaiting
+    UploadFile.read() inside an async def that then blocks on the ORM.
+    """
+    stream: BinaryIO = file.file
+    raw = stream.read()
+    return raw if isinstance(raw, (bytes, bytearray)) else bytes(raw)
+
+
+def import_transactions_from_csv(
     db: Session,
     account_id: int,
     file: UploadFile,
@@ -64,7 +76,7 @@ async def import_transactions_from_csv(
             detail="Upload a .csv file.",
         )
 
-    raw = await file.read()
+    raw = _read_upload_bytes(file)
     if not raw:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
@@ -116,7 +128,9 @@ async def import_transactions_from_csv(
     to_insert: list[Transaction] = []
 
     try:
-        for index, raw_row in enumerate(reader, start=2):  # row 1 = header
+        for raw_row in reader:
+            # Physical 1-based line in the CSV text (handles blanks / skipped rows).
+            line_num = reader.line_num
             if raw_row is None or all(
                 (value is None or str(value).strip() == "")
                 for value in raw_row.values()
@@ -137,7 +151,7 @@ async def import_transactions_from_csv(
                 rejected += 1
                 errors.append(
                     TransactionImportError(
-                        row=index, field="date", message="Missing required value"
+                        row=line_num, field="date", message="Missing required value"
                     )
                 )
                 continue
@@ -145,7 +159,7 @@ async def import_transactions_from_csv(
                 rejected += 1
                 errors.append(
                     TransactionImportError(
-                        row=index, field="merchant", message="Blank merchant"
+                        row=line_num, field="merchant", message="Blank merchant"
                     )
                 )
                 continue
@@ -153,7 +167,7 @@ async def import_transactions_from_csv(
                 rejected += 1
                 errors.append(
                     TransactionImportError(
-                        row=index, field="amount", message="Missing required value"
+                        row=line_num, field="amount", message="Missing required value"
                     )
                 )
                 continue
@@ -162,7 +176,7 @@ async def import_transactions_from_csv(
                 rejected += 1
                 errors.append(
                     TransactionImportError(
-                        row=index, field="merchant", message="Merchant is too long"
+                        row=line_num, field="merchant", message="Merchant is too long"
                     )
                 )
                 continue
@@ -170,7 +184,7 @@ async def import_transactions_from_csv(
                 rejected += 1
                 errors.append(
                     TransactionImportError(
-                        row=index,
+                        row=line_num,
                         field="description",
                         message="Description is too long",
                     )
@@ -180,7 +194,7 @@ async def import_transactions_from_csv(
                 rejected += 1
                 errors.append(
                     TransactionImportError(
-                        row=index, field="category", message="Category is too long"
+                        row=line_num, field="category", message="Category is too long"
                     )
                 )
                 continue
@@ -190,7 +204,9 @@ async def import_transactions_from_csv(
             except ValueError as exc:
                 rejected += 1
                 errors.append(
-                    TransactionImportError(row=index, field="date", message=str(exc))
+                    TransactionImportError(
+                        row=line_num, field="date", message=str(exc)
+                    )
                 )
                 continue
 
@@ -199,7 +215,9 @@ async def import_transactions_from_csv(
             except ValueError as exc:
                 rejected += 1
                 errors.append(
-                    TransactionImportError(row=index, field="amount", message=str(exc))
+                    TransactionImportError(
+                        row=line_num, field="amount", message=str(exc)
+                    )
                 )
                 continue
 
@@ -210,7 +228,7 @@ async def import_transactions_from_csv(
                 duplicates += 1
                 errors.append(
                     TransactionImportError(
-                        row=index,
+                        row=line_num,
                         field=None,
                         message="Duplicate of an existing or earlier row in this file",
                     )
