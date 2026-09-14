@@ -5,52 +5,14 @@ from __future__ import annotations
 from datetime import date
 from decimal import Decimal
 
-from fastapi.testclient import TestClient
-from sqlalchemy import create_engine
-from sqlalchemy.orm import Session, sessionmaker
-from sqlalchemy.pool import StaticPool
-
-from app.db.base import Base
-from app.db.session import get_db
-from app.main import app
-from app.models.account import Account
 from app.models.transaction import Transaction
-
-
-def _client_with_db():
-    engine = create_engine(
-        "sqlite+pysqlite:///:memory:",
-        connect_args={"check_same_thread": False},
-        poolclass=StaticPool,
-    )
-    TestingSessionLocal = sessionmaker(bind=engine, autoflush=False, autocommit=False)
-    Base.metadata.create_all(bind=engine)
-
-    def override_get_db():
-        db = TestingSessionLocal()
-        try:
-            yield db
-        finally:
-            db.close()
-
-    app.dependency_overrides[get_db] = override_get_db
-    client = TestClient(app)
-    db = TestingSessionLocal()
-    return client, db, engine
+from tests.conftest import cleanup_client, client_with_db, create_account
 
 
 def test_patch_category_sets_user_source_and_clears_confidence() -> None:
-    client, db, engine = _client_with_db()
+    client, db, engine = client_with_db()
     try:
-        account = Account(
-            name="Checking",
-            account_type="checking",
-            institution="Test Bank",
-            current_balance=Decimal("100.00"),
-        )
-        db.add(account)
-        db.commit()
-        db.refresh(account)
+        account = create_account(db)
 
         tx = Transaction(
             account_id=account.id,
@@ -83,13 +45,11 @@ def test_patch_category_sets_user_source_and_clears_confidence() -> None:
         assert refreshed.category_source == "user"
         assert refreshed.category_confidence is None
     finally:
-        app.dependency_overrides.clear()
-        db.close()
-        engine.dispose()
+        cleanup_client(client, db, engine)
 
 
 def test_patch_category_not_found() -> None:
-    client, db, engine = _client_with_db()
+    client, db, engine = client_with_db()
     try:
         response = client.patch(
             "/transactions/999999/category",
@@ -97,23 +57,13 @@ def test_patch_category_not_found() -> None:
         )
         assert response.status_code == 404
     finally:
-        app.dependency_overrides.clear()
-        db.close()
-        engine.dispose()
+        cleanup_client(client, db, engine)
 
 
 def test_patch_unsupported_category_maps_to_other() -> None:
-    client, db, engine = _client_with_db()
+    client, db, engine = client_with_db()
     try:
-        account = Account(
-            name="Checking",
-            account_type="checking",
-            institution="Test Bank",
-            current_balance=Decimal("100.00"),
-        )
-        db.add(account)
-        db.commit()
-        db.refresh(account)
+        account = create_account(db)
         tx = Transaction(
             account_id=account.id,
             date=date(2026, 9, 1),
@@ -137,6 +87,4 @@ def test_patch_unsupported_category_maps_to_other() -> None:
         assert body["category"] == "other"
         assert body["category_source"] == "user"
     finally:
-        app.dependency_overrides.clear()
-        db.close()
-        engine.dispose()
+        cleanup_client(client, db, engine)
