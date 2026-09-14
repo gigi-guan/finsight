@@ -1,15 +1,16 @@
+import PageShell from "@/components/page-shell";
+
 import styles from "./accounts.module.css";
 
 export default function AccountsLoading() {
   return (
-    <main className={styles.page}>
-      <header className={styles.header}>
-        <p className={styles.brand}>FinSight</p>
-        <h1 className={styles.title}>Accounts</h1>
-      </header>
+    <PageShell
+      title="Accounts"
+      subtitle="Create an account and record a snapshot balance (not a live ledger)."
+    >
       <p className={styles.status} role="status">
         Loading accounts…
       </p>
-    </main>
+    </PageShell>
   );
 }

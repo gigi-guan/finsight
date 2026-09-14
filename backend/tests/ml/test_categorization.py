@@ -3,6 +3,10 @@
 from __future__ import annotations
 
 import pytest
+
+# ML extras are optional (`pip install -e ".[ml]"`). Skip this module without sklearn.
+pytest.importorskip("sklearn")
+
 from sklearn.pipeline import Pipeline
 
 from app.ml.categorization.data import (
