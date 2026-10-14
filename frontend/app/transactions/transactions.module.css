@@ -1,129 +1,103 @@
 .reviewFilters {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem 0.85rem;
-  font-size: 0.85rem;
+  gap: 0.35rem 1.25rem;
+  padding-bottom: 0.15rem;
+  border-bottom: 1px solid var(--line);
 }
 
 .reviewFilter,
 .reviewFilterActive {
   text-decoration: none;
-  padding: 0.25rem 0;
+  padding: 0.45rem 0 0.55rem;
   border-bottom: 2px solid transparent;
-  color: #6b7280;
+  margin-bottom: -1px;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.reviewFilter:hover {
+  color: var(--navy);
 }
 
 .reviewFilterActive {
-  color: #111827;
-  border-bottom-color: #111827;
-  font-weight: 600;
+  color: var(--navy);
+  border-bottom-color: var(--gold);
 }
 
 .status {
-  padding: 1rem 0;
-  color: #6b7280;
-  font-size: 0.95rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
 }
 
 .error {
   padding: 1rem 1.1rem;
-  border: 1px solid #fecaca;
-  background: #fef2f2;
-  color: #991b1b;
+  border: 1px solid var(--danger-line);
+  background: var(--danger-bg);
+  color: var(--negative);
   font-size: 0.95rem;
   line-height: 1.45;
 }
 
 .tableWrap {
   overflow-x: auto;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
 }
 
 .table th,
 .table td {
   text-align: left;
-  padding: 0.7rem 0.45rem;
-  border-bottom: 1px solid #e5e7eb;
-  vertical-align: top;
+  padding: 0.8rem 0.9rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: middle;
 }
 
 .table th {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: var(--muted);
+  background: #f7f3ec;
 }
 
 .amount {
   font-variant-numeric: tabular-nums;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--mono);
+  font-size: 0.84rem;
   white-space: nowrap;
   text-align: right;
 }
 
 .amountPositive {
-  color: #047857;
+  color: var(--positive);
 }
 
 .amountNegative {
-  color: #b91c1c;
+  color: var(--negative);
 }
 
 .merchant {
   font-weight: 600;
+  color: var(--navy);
 }
 
 .description {
-  color: #4b5563;
+  color: var(--muted);
   max-width: 16rem;
 }
 
 .needsReview {
-  background: #fffbeb;
-}
-
-@media (prefers-color-scheme: dark) {
-  .status,
-  .table th,
-  .reviewFilter {
-    color: #9ca3af;
-  }
-
-  .reviewFilterActive {
-    color: #f9fafb;
-    border-bottom-color: #f9fafb;
-  }
-
-  .table th,
-  .table td {
-    border-bottom-color: #374151;
-  }
-
-  .description {
-    color: #9ca3af;
-  }
-
-  .needsReview {
-    background: #451a03;
-  }
-
-  .error {
-    border-color: #7f1d1d;
-    background: #450a0a;
-    color: #fecaca;
-  }
-
-  .amountPositive {
-    color: #34d399;
-  }
-
-  .amountNegative {
-    color: #fca5a5;
-  }
+  background: #f8f3ea;
 }

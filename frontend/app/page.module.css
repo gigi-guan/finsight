@@ -1,120 +1,139 @@
 .filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem 1rem;
+  gap: 0.85rem 1rem;
   align-items: end;
+  padding: 1rem 1.1rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
-  min-width: 10rem;
+  gap: 0.35rem;
+  min-width: 11rem;
 }
 
 .field label {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: var(--muted);
 }
 
 .field select {
   font: inherit;
   font-size: 0.95rem;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid #d1d5db;
-  background: transparent;
-  color: inherit;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
 }
 
 .apply {
   font: inherit;
-  font-size: 0.9rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.55rem 0.9rem;
-  border: 1px solid #111827;
-  background: #111827;
-  color: #f9fafb;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.1rem;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+  color: #f7f1e6;
   cursor: pointer;
+}
+
+.apply:hover {
+  background: var(--navy-soft);
 }
 
 .error {
   padding: 1rem 1.1rem;
-  border: 1px solid #fecaca;
-  background: #fef2f2;
-  color: #991b1b;
+  border: 1px solid var(--danger-line);
+  background: var(--danger-bg);
+  color: var(--negative);
   font-size: 0.95rem;
   line-height: 1.45;
 }
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
 }
 
 .card {
-  border: 1px solid #e5e7eb;
-  padding: 0.9rem 1rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  border-top: 2px solid var(--gold);
+  padding: 1.05rem 1.1rem 1.15rem;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.45rem;
 }
 
 .cardLabel {
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: #6b7280;
+  color: var(--muted);
 }
 
 .cardValue {
-  font-size: 1.25rem;
+  font-family: var(--serif);
+  font-size: 2rem;
   font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
   font-variant-numeric: tabular-nums;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  color: var(--navy);
 }
 
 .positive {
-  color: #047857;
+  color: var(--positive);
 }
 
 .negative {
-  color: #b91c1c;
+  color: var(--negative);
 }
 
 .panel {
-  border: 1px solid #e5e7eb;
-  padding: 1rem 1.1rem;
+  background: var(--paper-raised);
+  border: 1px solid var(--line);
+  padding: 1.15rem 1.2rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.8rem;
 }
 
 .panelTitle {
-  font-size: 1rem;
+  margin: 0;
+  font-family: var(--serif);
+  font-size: 1.45rem;
   font-weight: 600;
+  color: var(--navy);
 }
 
 .momLine {
-  font-size: 0.95rem;
-  line-height: 1.45;
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.5;
 }
 
 .columns {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
-  gap: 0.75rem;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 0.85rem;
 }
 
 .barList {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 0.85rem;
   margin: 0;
   padding: 0;
 }
@@ -122,76 +141,47 @@
 .barItem {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.35rem;
 }
 
 .barMeta {
   display: flex;
   justify-content: space-between;
   gap: 0.75rem;
-  font-size: 0.875rem;
+  font-size: 0.9rem;
 }
 
 .barTrack {
-  height: 0.45rem;
-  background: #e5e7eb;
+  height: 3px;
+  background: #e7e0d4;
 }
 
 .barFill {
   height: 100%;
-  background: #374151;
+  background: var(--navy);
 }
 
-.empty {
-  font-size: 0.9rem;
-  color: #6b7280;
-}
-
+.empty,
 .muted {
-  color: #6b7280;
+  color: var(--muted);
   font-weight: 400;
 }
 
-@media (prefers-color-scheme: dark) {
-  .field label,
-  .cardLabel,
-  .empty,
-  .muted {
-    color: #9ca3af;
-  }
+.empty {
+  margin: 0;
+  font-size: 0.95rem;
+}
 
-  .field select,
-  .card,
-  .panel,
-  .barTrack {
-    border-color: #374151;
+@media (max-width: 980px) {
+  .cards,
+  .columns {
+    grid-template-columns: 1fr 1fr;
   }
+}
 
-  .barTrack {
-    background: #374151;
-  }
-
-  .barFill {
-    background: #d1d5db;
-  }
-
-  .apply {
-    border-color: #e5e7eb;
-    background: #e5e7eb;
-    color: #111827;
-  }
-
-  .error {
-    border-color: #7f1d1d;
-    background: #450a0a;
-    color: #fecaca;
-  }
-
-  .positive {
-    color: #34d399;
-  }
-
-  .negative {
-    color: #fca5a5;
+@media (max-width: 640px) {
+  .cards,
+  .columns {
+    grid-template-columns: 1fr;
   }
 }
