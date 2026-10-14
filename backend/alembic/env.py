@@ -18,8 +18,9 @@ config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Prefer the app setting over any placeholder in alembic.ini
-config.set_main_option("sqlalchemy.url", get_settings().database_url)
+# Prefer the app setting over any placeholder in alembic.ini.
+# ConfigParser treats % as interpolation, so escape URL-encoded passwords.
+config.set_main_option("sqlalchemy.url", get_settings().database_url.replace("%", "%%"))
 
 target_metadata = Base.metadata
 
